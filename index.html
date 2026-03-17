@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Proceso de Observación Quejas - Afore Coppel</title>
+    <!-- Carga de Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Configuración de color para un look corporativo (Azul/Gris) -->
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #ffffff; /* CAMBIO: Fondo blanco */
+        }
+        .card {
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.06);
+            /* Opcional: Si quisieras un borde sutil para delimitar más en fondo blanco, podrías descomentar esto: */
+            /* border: 1px solid #e5e7eb; */
+        }
+        .text-coppel-blue {
+            color: #1f3a93; /* Un azul corporativo */
+        }
+        .bg-coppel-blue {
+            background-color: #1f3a93;
+        }
+        /* Custom styles for chart bars (using data to define width in JS) */
+        .bar-container {
+            min-height: 4rem; /* Mínimo 4rem para acomodar 2 o 3 líneas de texto */
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+        }
+        .bar-label {
+            width: 45%; 
+            font-size: 0.875rem;
+            color: #4b5563;
+            font-weight: 500;
+            padding-right: 1rem; /* Espacio extra entre label y barra */
+        }
+        .bar-wrapper {
+            display: flex;
+            align-items: center;
+            height: 100%;
+        }
+        .bar {
+            background-color: #3b82f6; /* Azul brillante para los datos */
+            min-height: 2.5rem; /* Asegura que la barra sea lo suficientemente alta */
+            border-radius: 0.5rem;
+            display: flex;
+            align-items: center;
+            padding: 0 0.5rem;
+        }
+        .bar-text {
+            color: white;
+            font-size: 0.7rem; 
+            font-weight: 700;
+            white-space: nowrap; /* Mantiene el texto de la data en una sola línea */
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+        }
+        
+        /* Estilos para el Gráfico de Dona (Antes Pastel) */
+        .pie-chart-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 200px;
+            width: 200px; /* Ancho fijo para mantener proporción */
+            position: relative;
+            /* El fondo (background) se aplica dinámicamente con JavaScript */
+            border-radius: 50%;
+            margin-top: 1rem;
+            background-color: #f0f0f0; /* Color base mientras carga JS */
+        }
+        /* AGREGADO: Pseudo-elemento para crear el efecto de Dona */
+        .pie-chart-container::after {
+            content: "";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 60%; /* Tamaño del agujero */
+            height: 60%;
+            background-color: white; /* Color del centro (igual al de la tarjeta) */
+            border-radius: 50%;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .pie-legend {
+            list-style: none;
+            padding: 0;
+            margin-top: 1.5rem;
+            width: 100%;
+        }
+        .legend-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between; /* Separar etiqueta del valor */
+            margin-bottom: 0.75rem;
+            font-size: 0.875rem;
+            padding: 0.5rem;
+            background-color: #f8fafc;
+            border-radius: 0.375rem;
+        }
+        .legend-info {
+            display: flex;
+            align-items: center;
+        }
+        .legend-color {
+            width: 1rem;
+            height: 1rem;
+            border-radius: 0.25rem;
+            margin-right: 0.75rem;
+        }
+    </style>
+</head>
+<body class="p-4 sm:p-8">
+
+    <header class="mb-8 border-b-4 border-coppel-blue pb-4">
+        <h1 class="text-3xl sm:text-4xl font-extrabold text-coppel-blue">Atención a Quejas</h1>
+        <p class="text-lg text-gray-600 mt-1">Febrero, 2026 | 40 Quejas</p>
+    </header>
+
+    <!-- Resumen Ejecutivo y Focos de Acción -->
+    <section class="mb-10">
+        <!-- Título de la sección principal -->
+        <h2 class="text-2xl font-bold mb-4 text-gray-800 border-l-4 border-red-500 pl-3">Resumen General</h2>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+
+            <!-- Foco 1: Cultura de Servicio -->
+            <div class="card p-5 bg-white rounded-lg border-t-4 border-red-600 text-center">
+                <p class="text-sm font-semibold text-red-600">FOCO CRÍTICO</p>
+                <h3 class="text-xl font-bold mt-1 text-gray-900">Experiencia del Cliente</h3>
+                <p class="text-3xl font-extrabold text-red-600 mt-2">68%</p>
+                <p class="text-sm text-gray-500 mt-1">
+                    "Tardé mucho tiempo en que me atendieran, ausencia de personal y horarios limitados".
+                </p>
+            </div>
+
+            <!-- Foco 2: Rigidez Operativa -->
+            <div class="card p-5 bg-white rounded-lg border-t-4 border-yellow-600 text-center">
+                <p class="text-sm font-semibold text-yellow-600">FOCO OPERATIVO</p>
+                <h3 class="text-xl font-bold mt-1 text-gray-900">Gestión de Citas</h3>
+                <p class="text-3xl font-extrabold text-yellow-600 mt-2">26%</p>
+                <p class="text-sm text-gray-500 mt-1">
+                    <strong>13%</strong> por "condicionaron cita" y <strong>13%</strong> por "no respetaron mi cita".
+                </p>
+            </div>
+
+            <!-- Foco 3: Impacto Regional -->
+            <div class="card p-5 bg-white rounded-lg border-t-4 border-green-600 text-center">
+                <p class="text-sm font-semibold text-green-600">FOCO GEOGRÁFICO</p>
+                <h3 class="text-xl font-bold mt-1 text-gray-900">Mérida y Mexicali</h3>
+                <p class="text-3xl font-extrabold text-green-600 mt-2">31%</p>
+                <p class="text-sm text-gray-500 mt-2 leading-relaxed">
+                    7 quejas <strong>Mérida</strong><br>
+                    5 quejas <strong>Mexicali</strong><br>
+                </p>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Sección Principal: Top 5 Motivos y Distribución por División -->
+    <section class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-10">
+
+        <!-- GRÁFICO 1: Top 5 Motivos de Queja (Tipificación General) -->
+        <div class="card p-6 bg-white rounded-lg">
+            <!-- Título centrado -->
+            <h3 class="text-xl font-semibold mb-4 text-coppel-blue text-center">Top 5: Motivos de Queja</h3>
+            <div id="chart-motivos" class="space-y-2">
+                <!-- Barras generadas por JS -->
+            </div>
+        </div>
+
+        <!-- GRÁFICO 2: Distribución por División (Donut Chart) -->
+        <div class="card p-6 bg-white rounded-lg flex flex-col items-center">
+            <h3 class="text-xl font-semibold mb-4 text-coppel-blue text-center">Distribución de Quejas por División</h3>
+            
+            <div id="chart-division" class="pie-chart-container">
+                <!-- El gráfico de dona se genera en CSS/JS -->
+            </div>
+            
+            <ul id="pie-legend" class="pie-legend max-w-xs w-full">
+                <!-- Leyenda generada por JS -->
+            </ul>
+        </div>
+
+    </section>
+
+    <footer class="mt-10 pt-4 border-t border-gray-300 text-center text-sm text-gray-500">
+        <p>&copy; 2026 Afore Coppel. Reporte Generado por la Gerencia de Atención al Público.</p>
+    </footer>
+
+    <script>
+        // Datos del análisis actualizado EXACTAMENTE SEGÚN IMAGEN
+        const dataMotivos = [
+            { label: "No pude hacer el trámite y tardé mucho tiempo en que me atendieran", value: 33, count: 13 },
+            { label: "No pude hacer el trámite, por ausencia de personal", value: 25, count: 10 },
+            { label: "No pude hacer el trámite, porque no me respetaron mi cita", value: 13, count: 5 },
+            { label: "No pude hacer el trámite, porque me condicionaron contar con cita", value: 13, count: 5 },
+            { label: "No pude hacer el trámite, por horarios limitados", value: 10, count: 4 },
+        ];
+        
+        // DATOS DE DIVISIÓN ACTUALIZADOS
+        const dataDivision = [
+            { division: "División 1", count: 12, percentage: 30.00, color: '#3b82f6' },  // Azul Intermedio
+            { division: "División 2", count: 15, percentage: 38.00, color: '#63b3ed' },  // Azul Claro
+            { division: "División 3", count: 13, percentage: 32.00, color: '#1f3a93' }, // Azul Corporativo
+        ];
+
+
+        // Función para renderizar el gráfico de barras (Motivos)
+        function renderMotivosChart() {
+            const container = document.getElementById('chart-motivos');
+            // Limpiar el contenedor antes de renderizar
+            container.innerHTML = ''; 
+            
+            dataMotivos.forEach(item => {
+                const barContainer = document.createElement('div');
+                barContainer.className = 'bar-container';
+
+                const label = document.createElement('div');
+                label.className = 'bar-label';
+                label.textContent = item.label; // El texto puede ocupar varias líneas
+
+                const barWrapper = document.createElement('div');
+                barWrapper.className = 'bar-wrapper flex-grow';
+
+                const bar = document.createElement('div');
+                bar.className = 'bar transition-all duration-700 ease-out';
+                // Calculamos el ancho relativo al 35% (valor máximo aproximado) para que se vean bien
+                // Ajustado para que la barra más grande no toque el borde si hay texto largo
+                const widthPercent = (item.value / 35) * 100;
+                bar.style.width = `${Math.min(widthPercent, 100)}%`;
+                
+                // Texto de porcentaje y conteo en blanco, dentro de la barra
+                const valueText = document.createElement('span');
+                valueText.className = 'bar-text';
+                // Mostramos con decimales si es necesario (ej 16.13%)
+                const percentageDisplay = Number.isInteger(item.value) ? item.value : item.value.toFixed(2);
+                valueText.textContent = `${percentageDisplay}% (${item.count})`;
+                
+                bar.appendChild(valueText);
+                barWrapper.appendChild(bar);
+
+                barContainer.appendChild(label);
+                barContainer.appendChild(barWrapper);
+                container.appendChild(barContainer);
+            });
+        }
+
+        // Función para renderizar el gráfico de pastel/dona (Divisiones)
+        function renderDivisionChart() {
+            const pieContainer = document.getElementById('chart-division');
+            const legendContainer = document.getElementById('pie-legend');
+            
+            // Limpiar leyenda antes de renderizar
+            legendContainer.innerHTML = '';
+
+            let currentAngle = 0;
+            let conicGradient = 'conic-gradient(';
+
+            dataDivision.forEach((item, index) => {
+                // Calcular el ángulo final
+                const angle = (item.percentage / 100) * 360;
+                const nextAngle = currentAngle + angle;
+                
+                // Mapear el color del JS a la definición de color en CSS
+                const colorCode = item.color;
+
+                conicGradient += `${colorCode} ${currentAngle}deg ${nextAngle}deg, `;
+                currentAngle = nextAngle;
+
+                // Construir Leyenda
+                const legendItem = document.createElement('li');
+                legendItem.className = 'legend-item';
+                legendItem.innerHTML = `
+                    <div class="legend-info">
+                        <div class="legend-color" style="background-color: ${colorCode};"></div>
+                        <span class="font-medium text-gray-700">${item.division}</span>
+                    </div>
+                    <span class="text-gray-500 text-sm"><strong>${Math.round(item.percentage)}%</strong> (${item.count})</span>
+                `;
+                legendContainer.appendChild(legendItem);
+            });
+
+            // Limpiar la última coma y cerrar la función
+            conicGradient = conicGradient.slice(0, -2) + ')';
+            
+            // Aplicar el gradiente al contenedor del pastel
+            pieContainer.style.background = conicGradient;
+        }
+
+        // Ejecutar las funciones al cargar el DOM
+        window.onload = function() {
+            renderMotivosChart();
+            renderDivisionChart();
+        };
+    </script>
+</body>
+</html>
